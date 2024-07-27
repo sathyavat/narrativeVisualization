@@ -2,39 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Narrative Visualization</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://unpkg.com/d3-annotation@2.5.1"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .scene {
-            margin: 20px;
-        }
-        button {
-            margin: 5px;
-        }
-        .chart {
-            margin-top: 20px;
-        }
-    </style>
+    <title>Interactive Slideshow - Vehicle MPG Analysis</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div id="scene1" class="scene">
-        <h2>Overview of MPG by Make</h2>
-        <button id="cityBtn1">City MPG</button>
-        <button id="highwayBtn1">Highway MPG</button>
-        <div id="chart1" class="chart"></div>
-    </div>
+    <h1>Interactive Slideshow - Vehicle MPG Analysis</h1>
+    <h2>Name: [Your Name] / Class: [Your Class] / Date: [Current Date]</h2>
 
-    <div id="scene2" class="scene">
-        <h2>Fuel Type Comparison</h2>
-        <button id="cityBtn2">City MPG</button>
-        <button id="highwayBtn2">Highway MPG</button>
-        <div id="chart2" class="chart"></div>
-    </div>
+    <p>This interactive slideshow provides a comprehensive analysis of vehicle fuel efficiency based on the 2017 dataset. The visualization explores various aspects of miles per gallon (MPG), comparing different car makes, fuel types, and engine specifications. Navigate through the scenes to gain insights into how these factors impact vehicle performance.</p>
 
-    <script src="main.js"></script>
+    <h3>Scene 1: Overview of MPG by Make</h3>
+    <p>In Scene 1, you'll explore a bar chart that illustrates the average MPG for various car makes. This scene allows you to compare the fuel efficiency of different manufacturers and see how they stack up against each other. Use the toggle buttons to switch between city and highway MPG to get a complete picture of each make's performance.</p>
+
+    <h3>Scene 2: Fuel Type Comparison</h3>
+    <p>Scene 2 focuses on comparing average MPG across different fuel types, such as gasoline, diesel, and electric. This scene highlights the efficiency of each fuel type and reveals how it affects vehicle mileage. Toggle between city and highway MPG to understand the variations in fuel efficiency for each type of fuel.</p>
+
+    <h3>Scene 3: Engine Cylinders and MPG</h3>
+    <p>In Scene 3, you'll investigate the relationship between the number of engine cylinders and MPG. This scatter plot demonstrates how engine size impacts fuel efficiency, allowing you to observe trends and correlations. The toggle buttons enable you to switch between city and highway MPG for a more detailed analysis of engine performance.</p>
+
+    <button onclick="window.location.href='scene1.html';">Begin Exploration</button>
 </body>
 </html>
