@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Narrative Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://unpkg.com/d3-annotation@2.5.1"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .scene {
+            margin: 20px;
+        }
+        button {
+            margin: 5px;
+        }
+        .chart {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="scene1" class="scene">
+        <h2>Overview of MPG by Make</h2>
+        <button id="cityBtn1">City MPG</button>
+        <button id="highwayBtn1">Highway MPG</button>
+        <div id="chart1" class="chart"></div>
+    </div>
+
+    <div id="scene2" class="scene">
+        <h2>Fuel Type Comparison</h2>
+        <button id="cityBtn2">City MPG</button>
+        <button id="highwayBtn2">Highway MPG</button>
+        <div id="chart2" class="chart"></div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
