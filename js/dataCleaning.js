@@ -42,7 +42,7 @@ async function cleanData(data) {
             const fuelType = row['Test Fuel Type Description'];
 
             // Filter based on conditions
-            return mpg > 0 && mpg <= 200 && co2 > 0 && !isNaN(mpg) && !isNaN(co2)
+            return mpg > 0 && mpg <= 200 && co2 >= 0 && !isNaN(mpg) && !isNaN(co2)
                 && !isNaN(horsepower) && horsepower > 0
                 && fuelType !== 'Tier 3 E10 Premium Gasoline (9 RVP @Low Alt.)'; // Remove specific fuel type
         })

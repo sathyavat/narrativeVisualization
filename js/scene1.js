@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createCharts(data) {
+        // Define your color scale, assuming a color scale for categorical data
+        const colorScale = d3.scaleOrdinal()
+            .domain(data.map(d => d.key))  // Assuming `d.key` is the category
+            .range(d3.schemeTableau10);    // Or any other color scheme you prefer
+
         // Group data for bar chart
         const manufacturerData = d3.rollup(
             data,
@@ -87,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('y', d => y(d.avgMPG))
             .attr('width', x.bandwidth())
             .attr('height', d => height - y(d.avgMPG))
-            .attr('fill', 'steelblue')
+            .attr('fill', d => colorScale(d.key))  // Apply color scale here
             .on('mouseover', function(event, d) {
                 const [x, y] = d3.pointer(event);
                 const chartRect = this.closest('svg').getBoundingClientRect();
@@ -107,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2000);
     }
 
+
     function addBarAnnotations(svg, data, x, y) {
         const largest = data.reduce((prev, current) => (prev.avgMPG > current.avgMPG) ? prev : current);
         const smallest = data.reduce((prev, current) => (prev.avgMPG < current.avgMPG) ? prev : current);
@@ -115,35 +121,45 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 note: { 
                     label: 'Highest average MPG', 
-                    title: largest.key,
-                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                    title: largest.key
                 },
+                connector: {
+                    end: "dot",          // Dot at the end of the connector line
+                    type: "line",        // Type of connector line
+                    lineType: "vertical", // Orientation of the line
+                    endScale: 10         // Size of the dot
+                },
+                color: ["#FFFFFF"],    // Color of the annotation line and dot
                 x: x(largest.key) + x.bandwidth() / 2, 
                 y: y(largest.avgMPG), 
                 dy: 30, 
-                dx: 50
+                dx: 10
             },
             {
                 note: { 
                     label: 'Lowest average MPG', 
-                    title: smallest.key,
-                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                    title: smallest.key
                 },
+                connector: {
+                    end: "dot",          // Dot at the end of the connector line
+                    type: "line",        // Type of connector line
+                    lineType: "vertical", // Orientation of the line
+                    endScale: 10         // Size of the dot
+                },
+                color: ["#FFFFFF"],    // Color of the annotation line and dot
                 x: x(smallest.key) + x.bandwidth() / 2, 
                 y: y(smallest.avgMPG), 
                 dy: -30, 
-                dx: 50
+                dx: 10
             }
         ];
 
         const makeAnnotations = d3.annotation()
-            .annotations(annotations)
-            .type(d3.annotationCallout)
-            .notePadding(10)
-            .textWrap(150);
+            .annotations(annotations);
 
         svg.append('g').call(makeAnnotations);
     }
+
 
     loadData();
 });

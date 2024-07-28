@@ -119,6 +119,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: largest.fuelType,
                     bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
                 },
+                connector: {
+                    end: "dot",          // Dot at the end of the connector line
+                    type: "line",        // Type of connector line
+                    lineType: "vertical", // Orientation of the line
+                    endScale: 8,         // Adjust size of the dot
+                    strokeWidth: 2       // Make the connector line thicker
+                },
+                color: ["#FFFFFF"],    // Color of the annotation line and dot
                 x: x(largest.fuelType) + x.bandwidth() / 2, 
                 y: y(largest.avgMPG), 
                 dy: 30, 
@@ -130,6 +138,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: smallest.fuelType,
                     bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
                 },
+                connector: {
+                    end: "dot",          // Dot at the end of the connector line
+                    type: "line",        // Type of connector line
+                    lineType: "vertical", // Orientation of the line
+                    endScale: 8,         // Adjust size of the dot
+                    strokeWidth: 2       // Make the connector line thicker
+                },
+                color: ["#FFFFFF"],    // Color of the annotation line and dot
                 x: x(smallest.fuelType) + x.bandwidth() / 2, 
                 y: y(smallest.avgMPG), 
                 dy: -30, 
@@ -139,12 +155,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const makeAnnotations = d3.annotation()
             .annotations(annotations)
-            .type(d3.annotationCallout)
-            .notePadding(10)
-            .textWrap(150);
+            .type(d3.annotationCallout)  // Use callout annotations
+            .notePadding(10)  // Padding around the note text
+            .textWrap(150);   // Wrap text to fit within width
 
         svg.append('g').call(makeAnnotations);
     }
+
 
     loadData();
 });
