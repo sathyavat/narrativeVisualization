@@ -29,11 +29,6 @@ h3 {
     margin: 20px 40px 10px;
 }
 
-h4 {
-    color: #444;
-    margin: 10px 0;
-}
-
 button {
     display: block;
     margin: 20px auto;
@@ -66,10 +61,11 @@ button:hover {
 
 .scene-overview img {
     width: 30%;
-    margin-right: 20px;
     height: auto;
+    margin-left: auto;
+    padding-left: 20px;
 }
 
 .scene-overview div {
-    width: 50%;
+    width: 70%;
 }
