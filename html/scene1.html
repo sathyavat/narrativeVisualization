@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Overview of Vehicle Types in the 2024 Dataset</title>
+    <title>CO2 Emissions by Fuel Type</title>
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
@@ -10,10 +10,16 @@
 </head>
 <body>
     <div id="scene1" class="scene">
-        <h1>Overview of Vehicle Types in the 2024 Dataset</h1>
-        <p>In this scene, we explore the types of vehicles and manufacturers in our 2024 dataset. By examining the distribution of vehicle types and manufacturers, we can gain insights into the focus areas of different manufacturers and the overall composition of the dataset.</p>
+        <h1>CO2 Emissions by Fuel Type</h1>
+        <p>In this scene, we analyze the environmental impact of different fuel types used in vehicles. This section examines the emissions produced by various fuels, highlighting which ones are more environmentally friendly. Understand how fuel choices affect both vehicle performance and the broader environmental footprint.</p>
         <div class="chart-container">
-            <div id="manufacturer-chart"></div>
+            <div id="emissions-chart"></div>
+        </div>
+
+        <div class="button-group">
+            <button id="filter-zero-emissions">Zero Emissions</button>
+            <button id="filter-non-zero-emissions">Non-Zero Emissions</button>
+            <button id="filter-all">All</button>
         </div>
     </div>
 

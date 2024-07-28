@@ -1,35 +1,41 @@
 import { cleanData } from './dataCleaning.js'; // Import the cleaning function
+import { colorScale } from './colorScale.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     async function loadData() {
-        // Load the data using await
+        // Load and clean data
         const data = await d3.csv('../data/cars2024.csv');
-        const cleanedData = await cleanData(data); // Clean the data
-
+        const cleanedData = await cleanData(data);
         createCharts(cleanedData);
     }
 
     function createCharts(data) {
-        // Convert RND_ADJ_FE to numbers and filter out rows with RND_ADJ_FE > 200
-        data.forEach(d => {
-            d['RND_ADJ_FE'] = +d['RND_ADJ_FE']; // Convert to number
-        });
 
-        // Process the data for MPG by fuel type
-        const mpgByFuelType = d3.rollups(data, v => d3.mean(v, d => +d['RND_ADJ_FE']), d => d['Test Fuel Type Description'])
-            .map(([fuelType, avgMPG]) => ({ fuelType, avgMPG }))
-            .sort((a, b) => d3.descending(a.avgMPG, b.avgMPG));
+        // Group data for bar chart
+        const manufacturerData = d3.rollup(
+            data,
+            v => ({
+                count: v.length,
+                avgMPG: d3.mean(v, d => +d['RND_ADJ_FE'])
+            }),
+            d => d['Vehicle Manufacturer Name']
+        );
+        const manufacturerDataArray = Array.from(manufacturerData, ([key, value]) => ({
+            key,
+            count: value.count,
+            avgMPG: value.avgMPG
+        }));
 
         // Set dimensions and margins for bar chart
         const margin = { top: 70, right: 30, bottom: 100, left: 70 };
-        const container = document.getElementById('emissions-chart');
+        const container = document.getElementById('manufacturer-chart');
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
 
         const width = containerWidth - margin.left - margin.right;
-        const height = containerHeight - margin.top - margin.bottom;
+        const height = containerHeight - margin.top - margin.bottom; // Dynamic height based on container
 
-        const barSvg = d3.select("#emissions-chart")
+        const barSvg = d3.select("#manufacturer-chart")
             .append("svg")
             .attr("width", containerWidth) // Full container width
             .attr("height", containerHeight) // Full container height
@@ -37,16 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
         const x = d3.scaleBand()
-            .domain(mpgByFuelType.map(d => d.fuelType))
+            .domain(manufacturerDataArray.map(d => d.key))
             .range([0, width])
             .padding(0.1);
 
         const y = d3.scaleLinear()
-            .domain([0, d3.max(mpgByFuelType, d => d.avgMPG)])
-            .nice()
+            .domain([0, d3.max(manufacturerDataArray, d => d.avgMPG)])
             .range([height, 0]);
 
-        // Append x and y axes
         barSvg.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${height})`)
@@ -59,9 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
         barSvg.append('text')
             .attr('class', 'x-axis-label')
             .attr('x', width / 2)
-            .attr('y', height + 90)
+            .attr('y', height + 100)
             .attr('text-anchor', 'middle')
-            .text('Fuel Type');
+            .text('Car manufacturer');
 
         barSvg.append('g')
             .attr('class', 'y-axis')
@@ -74,19 +78,18 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('y', -margin.left + 15)
             .attr('transform', 'rotate(-90)')
             .attr('text-anchor', 'middle')
-            .text('Fuel Efficiency (MPG)');
+            .text('Average MPG');
 
-        // Create the bars
         barSvg.selectAll('.bar')
-            .data(mpgByFuelType)
+            .data(manufacturerDataArray)
             .enter()
             .append('rect')
             .attr('class', 'bar')
-            .attr('x', d => x(d.fuelType))
+            .attr('x', d => x(d.key))
             .attr('y', d => y(d.avgMPG))
             .attr('width', x.bandwidth())
             .attr('height', d => height - y(d.avgMPG))
-            .attr('fill', 'steelblue')
+            .attr('fill', d => colorScale(d.key))  // Apply color scale here
             .on('mouseover', function(event, d) {
                 const [x, y] = d3.pointer(event);
                 const chartRect = this.closest('svg').getBoundingClientRect();
@@ -94,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     .style('left', `${chartRect.left + x + 15}px`)
                     .style('top', `${chartRect.top + y + 15}px`)
                     .style('display', 'block')
-                    .html(`Fuel Type: ${d.fuelType}<br>Average MPG: ${d.avgMPG.toFixed(2)}<br>Average CO2 Emissions: ${d3.mean(data.filter(f => f['Test Fuel Type Description'] === d.fuelType), f => +f['CO2 (g/mi)']).toFixed(2)} g/mi`);
+                    .html(`Manufacturer: ${d.key}<br>Average MPG: ${d.avgMPG.toFixed(2)}<br># of car makes: ${d.count}`);
             })
             .on('mouseout', function() {
                 d3.select('#tooltip').style('display', 'none');
@@ -102,51 +105,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Add annotations with a delay
         setTimeout(() => {
-            addBarAnnotations(barSvg, mpgByFuelType, x, y);
+            addBarAnnotations(barSvg, manufacturerDataArray, x, y);
         }, 2000);
     }
+
 
     function addBarAnnotations(svg, data, x, y) {
         const largest = data.reduce((prev, current) => (prev.avgMPG > current.avgMPG) ? prev : current);
         const smallest = data.reduce((prev, current) => (prev.avgMPG < current.avgMPG) ? prev : current);
 
-        console.log(smallest);
-
         const annotations = [
             {
                 note: { 
-                    label: 'Highest MPG', 
-                    title: largest.fuelType,
-                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                    label: 'Highest average MPG', 
+                    title: largest.key
                 },
                 connector: {
                     end: "dot",          // Dot at the end of the connector line
                     type: "line",        // Type of connector line
                     lineType: "vertical", // Orientation of the line
-                    endScale: 8,         // Adjust size of the dot
-                    strokeWidth: 2       // Make the connector line thicker
+                    endScale: 10         // Size of the dot
                 },
                 color: ["#FFFFFF"],    // Color of the annotation line and dot
-                x: x(largest.fuelType) + x.bandwidth() / 2, 
+                x: x(largest.key) + x.bandwidth() / 2, 
                 y: y(largest.avgMPG), 
                 dy: 30, 
                 dx: 10
             },
             {
                 note: { 
-                    label: 'Lowest MPG', 
-                    title: smallest.fuelType,
-                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                    label: 'Lowest average MPG', 
+                    title: smallest.key
                 },
                 connector: {
                     end: "dot",          // Dot at the end of the connector line
                     type: "line",        // Type of connector line
                     lineType: "vertical", // Orientation of the line
-                    endScale: 8,         // Adjust size of the dot
-                    strokeWidth: 2       // Make the connector line thicker
+                    endScale: 10         // Size of the dot
                 },
                 color: ["#FFFFFF"],    // Color of the annotation line and dot
-                x: x(smallest.fuelType) + x.bandwidth() / 2, 
+                x: x(smallest.key) + x.bandwidth() / 2, 
                 y: y(smallest.avgMPG), 
                 dy: -30, 
                 dx: 10
@@ -154,10 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const makeAnnotations = d3.annotation()
-            .annotations(annotations)
-            .type(d3.annotationCallout)  // Use callout annotations
-            .notePadding(10)  // Padding around the note text
-            .textWrap(150);   // Wrap text to fit within width
+            .annotations(annotations);
 
         svg.append('g').call(makeAnnotations);
     }

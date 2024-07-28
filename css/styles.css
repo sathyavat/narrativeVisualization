@@ -113,3 +113,14 @@ button:hover {
 .legend-item rect {
   stroke: #FFFFFF; /* White border around legend items for better visibility */
 }
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.button-group button {
+  margin: 0 10px;
+}
+

@@ -1,4 +1,6 @@
 import { cleanData } from './dataCleaning.js';
+import { colorScale } from './colorScale.js';
+
 
 document.addEventListener('DOMContentLoaded', function() {
   async function loadData() {
@@ -44,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
       .range([height, 0]);
 
     const manufacturers = Array.from(new Set(dataForChart.map(d => d.manufacturer)));
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
-      .domain(manufacturers);
 
     svg.append("g")
       .attr("class", "x-axis")
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("cy", d => y(d.mpg))
       .attr("r", 4)
       .attr("fill", d => colorScale(d.manufacturer))
-      .attr("opacity", 0.2)
+      .attr("opacity", 0.9)
       .on("mouseover", function(event, d) {
         const tooltip = d3.select("#tooltip");
         tooltip.style("display", "block")
