@@ -55,15 +55,15 @@ button:hover {
     margin: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #fff;
 }
 
 .scene-overview {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     margin: 20px 40px;
 }
 
 .scene-overview img {
-    display
+    margin-left: 20px;
+}
