@@ -59,11 +59,17 @@ button:hover {
 
 .scene-overview {
     display: flex;
-    flex-direction: row;
     align-items: flex-start;
-    margin: 20px 40px;
+    margin: 20px 0;
+    padding: 0 10%;
 }
 
 .scene-overview img {
-    margin-left: 20px;
+    width: 30%;
+    margin-right: 20px;
+    height: auto;
+}
+
+.scene-overview div {
+    width: 50%;
 }
