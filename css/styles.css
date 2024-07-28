@@ -1,65 +1,75 @@
-/* styles.css */
-
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-h1, h2, h3 {
-    color: #333;
+    background-color: #f4f4f9;
 }
 
 h1 {
-    font-size: 2em;
-    margin-top: 20px;
+    color: #333;
     text-align: center;
+    margin-top: 20px;
 }
 
 h2 {
-    font-size: 1.5em;
+    color: #555;
     text-align: center;
     margin-top: 10px;
 }
 
-h3 {
-    font-size: 1.2em;
-    margin-top: 20px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
+p {
+    color: #666;
+    font-size: 18px;
+    text-align: justify;
+    margin: 20px 40px;
 }
 
-p {
-    margin: 0 15px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 5px;
+h3 {
+    color: #444;
+    margin: 20px 40px 10px;
+}
+
+h4 {
+    color: #444;
+    margin: 10px 40px;
 }
 
 button {
-    display: inline-block;
-    margin: 20px;
+    display: block;
+    margin: 20px auto;
     padding: 10px 20px;
-    font-size: 1em;
-    color: #fff;
-    background-color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
+.scene {
     padding: 20px;
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
 }
 
+.scene-overview {
+    margin: 20px 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.scene-overview img {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
