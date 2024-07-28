@@ -1,29 +1,53 @@
+import { cleanData } from './dataCleaning.js'; // Import the cleaning function
+
 document.addEventListener('DOMContentLoaded', function() {
     async function loadData() {
+        // Load and clean data
         const data = await d3.csv('../data/cars2024.csv');
-        createCharts(data);
+        const cleanedData = await cleanData(data);
+        createCharts(cleanedData);
     }
 
     function createCharts(data) {
-
         // Group data for bar chart
-        const manufacturerData = d3.rollup(data, v => v.length, d => d['Vehicle Manufacturer Name']);
-        const manufacturerDataArray = Array.from(manufacturerData, ([key, value]) => ({ key, value }));
+        const manufacturerData = d3.rollup(
+            data,
+            v => ({
+                count: v.length,
+                avgMPG: d3.mean(v, d => +d['RND_ADJ_FE'])
+            }),
+            d => d['Vehicle Manufacturer Name']
+        );
+        const manufacturerDataArray = Array.from(manufacturerData, ([key, value]) => ({
+            key,
+            count: value.count,
+            avgMPG: value.avgMPG
+        }));
 
         // Set dimensions and margins for bar chart
-        const margin = { top: 100, right: 100, bottom: 100, left: 100 },
-            width = 800 - margin.left - margin.right, 
-            height = 500 - margin.top - margin.bottom;
+        const margin = { top: 70, right: 30, bottom: 100, left: 70 };
+        const container = document.getElementById('manufacturer-chart');
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
 
-        const barSvg = d3.select('#manufacturer-chart')
-            .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
+        const width = containerWidth - margin.left - margin.right;
+        const height = containerHeight - margin.top - margin.bottom; // Dynamic height based on container
 
-        const x = d3.scaleBand().domain(manufacturerDataArray.map(d => d.key)).range([0, width]).padding(0.1);
-        const y = d3.scaleLinear().domain([0, d3.max(manufacturerDataArray, d => d.value)]).range([height, 0]);
+        const barSvg = d3.select("#manufacturer-chart")
+            .append("svg")
+            .attr("width", containerWidth) // Full container width
+            .attr("height", containerHeight) // Full container height
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleBand()
+            .domain(manufacturerDataArray.map(d => d.key))
+            .range([0, width])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(manufacturerDataArray, d => d.avgMPG)])
+            .range([height, 0]);
 
         barSvg.append('g')
             .attr('class', 'x-axis')
@@ -33,9 +57,26 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end');
 
+        // Add X-axis label
+        barSvg.append('text')
+            .attr('class', 'x-axis-label')
+            .attr('x', width / 2)
+            .attr('y', height + 100)
+            .attr('text-anchor', 'middle')
+            .text('Car manufacturer');
+
         barSvg.append('g')
             .attr('class', 'y-axis')
             .call(d3.axisLeft(y));
+
+        // Add Y-axis label
+        barSvg.append('text')
+            .attr('class', 'y-axis-label')
+            .attr('x', -height / 2)
+            .attr('y', -margin.left + 15)
+            .attr('transform', 'rotate(-90)')
+            .attr('text-anchor', 'middle')
+            .text('Average MPG');
 
         barSvg.selectAll('.bar')
             .data(manufacturerDataArray)
@@ -43,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .append('rect')
             .attr('class', 'bar')
             .attr('x', d => x(d.key))
-            .attr('y', d => y(d.value))
+            .attr('y', d => y(d.avgMPG))
             .attr('width', x.bandwidth())
-            .attr('height', d => height - y(d.value))
+            .attr('height', d => height - y(d.avgMPG))
             .attr('fill', 'steelblue')
             .on('mouseover', function(event, d) {
                 const [x, y] = d3.pointer(event);
@@ -54,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     .style('left', `${chartRect.left + x + 15}px`)
                     .style('top', `${chartRect.top + y + 15}px`)
                     .style('display', 'block')
-                    .html(`Manufacturer: ${d.key}<br>Count: ${d.value}`);
+                    .html(`Manufacturer: ${d.key}<br>Average MPG: ${d.avgMPG.toFixed(2)}<br># of car makes: ${d.count}`);
             })
             .on('mouseout', function() {
                 d3.select('#tooltip').style('display', 'none');
@@ -67,29 +108,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addBarAnnotations(svg, data, x, y) {
-        const largest = data.reduce((prev, current) => (prev.value > current.value) ? prev : current);
-        const smallest = data.reduce((prev, current) => (prev.value < current.value) ? prev : current);
+        const largest = data.reduce((prev, current) => (prev.avgMPG > current.avgMPG) ? prev : current);
+        const smallest = data.reduce((prev, current) => (prev.avgMPG < current.avgMPG) ? prev : current);
 
         const annotations = [
             {
                 note: { 
-                    label: 'Largest manufacturer', 
+                    label: 'Highest average MPG', 
                     title: largest.key,
                     bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
                 },
                 x: x(largest.key) + x.bandwidth() / 2, 
-                y: y(largest.value), 
+                y: y(largest.avgMPG), 
                 dy: 30, 
                 dx: 50
             },
             {
                 note: { 
-                    label: 'Smallest manufacturer', 
+                    label: 'Lowest average MPG', 
                     title: smallest.key,
                     bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
                 },
                 x: x(smallest.key) + x.bandwidth() / 2, 
-                y: y(smallest.value), 
+                y: y(smallest.avgMPG), 
                 dy: -30, 
                 dx: 50
             }
@@ -103,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         svg.append('g').call(makeAnnotations);
     }
-
 
     loadData();
 });

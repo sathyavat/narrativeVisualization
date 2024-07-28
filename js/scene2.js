@@ -1,97 +1,150 @@
-// Load the data and create the bar chart
-d3.csv("../data/cars2024.csv").then(function(data) {
-    // Process the data for emissions by fuel type
-    const emissionsByFuelType = d3.rollups(data, v => d3.mean(v, d => +d['CO2 (g/mi)']), d => d['Test Fuel Type Description'])
-        .map(([fuelType, avgEmissions]) => ({ fuelType, avgEmissions }))
-        .sort((a, b) => d3.descending(a.avgEmissions, b.avgEmissions));
+import { cleanData } from './dataCleaning.js'; // Import the cleaning function
 
-    // Set up the SVG dimensions and margins
-    const margin = { top: 40, right: 20, bottom: 50, left: 70 }; // Updated to percentage for responsiveness
-    const width = parseInt(d3.select('#emissions-chart').style('width')) - margin.left - margin.right; // Updated
-    const height = parseInt(d3.select('#emissions-chart').style('height')) - margin.top - margin.bottom; // Updated
+document.addEventListener('DOMContentLoaded', function() {
+    async function loadData() {
+        // Load the data using await
+        const data = await d3.csv('../data/cars2024.csv');
+        const cleanedData = await cleanData(data); // Clean the data
 
-    const svg = d3.select("#emissions-chart")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+        createCharts(cleanedData);
+    }
 
-    // Set up the x and y scales
-    const x = d3.scaleBand()
-        .domain(emissionsByFuelType.map(d => d.fuelType))
-        .range([0, width])
-        .padding(0.1);
-
-    const y = d3.scaleLinear()
-        .domain([0, d3.max(emissionsByFuelType, d => d.avgEmissions)])
-        .nice()
-        .range([height, 0]);
-
-    // Append the x and y axes
-    svg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x))
-        .selectAll("text")
-        .attr("transform", "rotate(-45)")
-        .style("text-anchor", "end");
-
-    svg.append("g")
-        .attr("class", "y-axis")
-        .call(d3.axisLeft(y));
-
-    // Create the bars
-    svg.selectAll(".bar")
-        .data(emissionsByFuelType)
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .attr("x", d => x(d.fuelType))
-        .attr("y", d => y(d.avgEmissions))
-        .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.avgEmissions))
-        .attr("fill", "steelblue")
-        .on("mouseover", function(event, d) {
-            d3.select("#tooltip")
-                .style("left", event.pageX + "px")
-                .style("top", event.pageY + "px")
-                .style("display", "inline-block")
-                .html(`Fuel Type: ${d.fuelType}<br>Average CO2 Emissions: ${d.avgEmissions.toFixed(2)} g/mi`);
-        })
-        .on("mouseout", function() {
-            d3.select("#tooltip")
-                .style("display", "none");
+    function createCharts(data) {
+        // Convert RND_ADJ_FE to numbers and filter out rows with RND_ADJ_FE > 200
+        data.forEach(d => {
+            d['RND_ADJ_FE'] = +d['RND_ADJ_FE']; // Convert to number
         });
 
-    // Add annotations
-    const annotations = [
-        {
-            note: {
-                label: "Lowest average emissions",
-                title: emissionsByFuelType[emissionsByFuelType.length - 1].fuelType
-            },
-            x: x(emissionsByFuelType[emissionsByFuelType.length - 1].fuelType) + x.bandwidth() / 2,
-            y: y(emissionsByFuelType[emissionsByFuelType.length - 1].avgEmissions),
-            dy: -30,
-            dx: 0
-        },
-        {
-            note: {
-                label: "Highest average emissions",
-                title: emissionsByFuelType[0].fuelType
-            },
-            x: x(emissionsByFuelType[0].fuelType) + x.bandwidth() / 2,
-            y: y(emissionsByFuelType[0].avgEmissions),
-            dy: -30,
-            dx: 0
-        }
-    ];
+        // Process the data for MPG by fuel type
+        const mpgByFuelType = d3.rollups(data, v => d3.mean(v, d => +d['RND_ADJ_FE']), d => d['Test Fuel Type Description'])
+            .map(([fuelType, avgMPG]) => ({ fuelType, avgMPG }))
+            .sort((a, b) => d3.descending(a.avgMPG, b.avgMPG));
 
-    const makeAnnotations = d3.annotation()
-        .annotations(annotations);
+        // Set dimensions and margins for bar chart
+        const margin = { top: 70, right: 30, bottom: 100, left: 70 };
+        const container = document.getElementById('emissions-chart');
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
 
-    svg.append("g")
-        .attr("class", "annotation-group")
-        .call(makeAnnotations);
+        const width = containerWidth - margin.left - margin.right;
+        const height = containerHeight - margin.top - margin.bottom;
+
+        const barSvg = d3.select("#emissions-chart")
+            .append("svg")
+            .attr("width", containerWidth) // Full container width
+            .attr("height", containerHeight) // Full container height
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleBand()
+            .domain(mpgByFuelType.map(d => d.fuelType))
+            .range([0, width])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(mpgByFuelType, d => d.avgMPG)])
+            .nice()
+            .range([height, 0]);
+
+        // Append x and y axes
+        barSvg.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x))
+            .selectAll('text')
+            .attr('transform', 'rotate(-45)')
+            .style('text-anchor', 'end');
+
+        // Add X-axis label
+        barSvg.append('text')
+            .attr('class', 'x-axis-label')
+            .attr('x', width / 2)
+            .attr('y', height + 90)
+            .attr('text-anchor', 'middle')
+            .text('Fuel Type');
+
+        barSvg.append('g')
+            .attr('class', 'y-axis')
+            .call(d3.axisLeft(y));
+
+        // Add Y-axis label
+        barSvg.append('text')
+            .attr('class', 'y-axis-label')
+            .attr('x', -height / 2)
+            .attr('y', -margin.left + 15)
+            .attr('transform', 'rotate(-90)')
+            .attr('text-anchor', 'middle')
+            .text('Fuel Efficiency (MPG)');
+
+        // Create the bars
+        barSvg.selectAll('.bar')
+            .data(mpgByFuelType)
+            .enter()
+            .append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => x(d.fuelType))
+            .attr('y', d => y(d.avgMPG))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d.avgMPG))
+            .attr('fill', 'steelblue')
+            .on('mouseover', function(event, d) {
+                const [x, y] = d3.pointer(event);
+                const chartRect = this.closest('svg').getBoundingClientRect();
+                d3.select('#tooltip')
+                    .style('left', `${chartRect.left + x + 15}px`)
+                    .style('top', `${chartRect.top + y + 15}px`)
+                    .style('display', 'block')
+                    .html(`Fuel Type: ${d.fuelType}<br>Average MPG: ${d.avgMPG.toFixed(2)}<br>Average CO2 Emissions: ${d3.mean(data.filter(f => f['Test Fuel Type Description'] === d.fuelType), f => +f['CO2 (g/mi)']).toFixed(2)} g/mi`);
+            })
+            .on('mouseout', function() {
+                d3.select('#tooltip').style('display', 'none');
+            });
+
+        // Add annotations with a delay
+        setTimeout(() => {
+            addBarAnnotations(barSvg, mpgByFuelType, x, y);
+        }, 2000);
+    }
+
+    function addBarAnnotations(svg, data, x, y) {
+        const largest = data.reduce((prev, current) => (prev.avgMPG > current.avgMPG) ? prev : current);
+        const smallest = data.reduce((prev, current) => (prev.avgMPG < current.avgMPG) ? prev : current);
+
+        console.log(smallest);
+
+        const annotations = [
+            {
+                note: { 
+                    label: 'Highest MPG', 
+                    title: largest.fuelType,
+                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                },
+                x: x(largest.fuelType) + x.bandwidth() / 2, 
+                y: y(largest.avgMPG), 
+                dy: 30, 
+                dx: 10
+            },
+            {
+                note: { 
+                    label: 'Lowest MPG', 
+                    title: smallest.fuelType,
+                    bgPadding: { top: 2, left: 5, right: 5, bottom: 2 } // Add background padding
+                },
+                x: x(smallest.fuelType) + x.bandwidth() / 2, 
+                y: y(smallest.avgMPG), 
+                dy: -30, 
+                dx: 10
+            }
+        ];
+
+        const makeAnnotations = d3.annotation()
+            .annotations(annotations)
+            .type(d3.annotationCallout)
+            .notePadding(10)
+            .textWrap(150);
+
+        svg.append('g').call(makeAnnotations);
+    }
+
+    loadData();
 });

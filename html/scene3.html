@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fuel Efficiency vs. Horsepower</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <script type="module" src="../js/scene3.js" defer></script>
+</head>
+<body>
+    <div id="scene3" class="scene">
+        <h1>Fuel Efficiency vs. Horsepower</h1>
+        <p>In this scene, we explore the relationship between fuel efficiency and horsepower across different vehicles. This scatter plot provides insights into how fuel efficiency (measured in miles per gallon) correlates with horsepower. Understanding this relationship helps us assess how power impacts fuel consumption and compare the performance of various vehicle types.</p>
+        <div class="chart-container">
+            <div id="fuel-efficiency-chart"></div>
+        </div>
+    </div>
+
+    <div id="tooltip"></div>
+
+    <button id="prev-scene">Previous</button>
+    <button id="next-scene">Next</button>
+
+    <script src="../js/sceneNavigation.js"></script>
+</body>
+</html>

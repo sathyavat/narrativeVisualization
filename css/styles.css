@@ -62,13 +62,25 @@ button:hover {
 
 .chart-container {
     display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    padding: 20px;
+    justify-content: center; /* Center the chart container */
+    margin: 2% 0; /* Use percentages for margin */
+    padding: 2%; /* Use percentages for padding */
+    width: 100%; /* Ensure chart-container takes full width */
+    height: 500px;
 }
 
-#vehicle-type-chart, #manufacturer-chart {
-    width: 40%;
+#manufacturer-chart,
+#emissions-chart,
+#fuel-efficiency-chart {
+    width: 100%; /* Use 100% width for charts */
+    height: 500px; /* Fixed height */
+}
+
+#manufacturer-chart svg,
+#emissions-chart svg,
+#fuel-efficiency-chart svg {
+    width: 100%; /* Use 100% width for SVG */
+    height: auto; /* Adjust height automatically */
 }
 
 #tooltip {
@@ -83,6 +95,38 @@ button:hover {
     z-index: 10;
 }
 
-.annotation-note-title, .annotation-note-label {
-    fill: #FFFFFF; /* White text for annotations */
+.annotation-note-title,
+.annotation-note-label,
+.x-axis-label,
+.y-axis-label {
+    fill: #FFFFFF; /* White text for annotations and axis labels */
+}
+
+.legend {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #FFFFFF; /* White text for the legend */
+    background-color: #333333; /* Dark background for the legend */
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7); /* Darker shadow to make the legend pop */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    color: #FFFF00; /* Color of text for legend items */
+}
+
+.legend-color-box {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #444444; /* Slightly darker border */
+}
+
+.legend-label {
+    color: #FFFF00; /* Color of text for legend labels */
+    font-size: 14px; /* Font size for legend text */
 }
