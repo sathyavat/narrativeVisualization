@@ -31,7 +31,7 @@ h3 {
 
 h4 {
     color: #444;
-    margin: 10px 40px;
+    margin: 10px 0;
 }
 
 button {
@@ -59,17 +59,11 @@ button:hover {
 }
 
 .scene-overview {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin: 20px 40px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
 }
 
 .scene-overview img {
-    display: block;
-    margin: 10px auto;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
+    display
