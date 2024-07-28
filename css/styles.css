@@ -1,132 +1,115 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #121212; /* Dark background */
-    color: #FFFFFF; /* White text */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212; /* Dark background */
+  color: #FFFFFF; /* White text */
 }
 
 h1, h2, h3 {
-    color: #FFFFFF; /* White headings */
-    text-align: center;
+  color: #FFFFFF; /* White headings */
+  text-align: center;
 }
 
 p {
-    color: #BBBBBB; /* Light gray text */
-    font-size: 18px;
-    text-align: justify;
-    margin: 20px 40px;
+  color: #BBBBBB; /* Light gray text */
+  font-size: 18px;
+  text-align: justify;
+  margin: 20px 40px;
 }
 
 button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
 }
 
 button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 .scene {
-    padding: 20px;
-    margin: 20px;
-    border: 1px solid #444444; /* Dark border */
-    border-radius: 8px;
-    background-color: #1e1e1e; /* Slightly lighter dark background for scenes */
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #444444; /* Dark border */
+  border-radius: 8px;
+  background-color: #1e1e1e; /* Slightly lighter dark background for scenes */
 }
 
 .scene-overview {
-    display: flex;
-    align-items: flex-start;
-    margin: 20px 0;
-    padding: 0 10%;
+  display: flex;
+  align-items: flex-start;
+  margin: 20px 0;
+  padding: 0 10%;
 }
 
 .scene-overview img {
-    width: 30%;
-    height: auto;
-    margin-left: auto;
-    padding-left: 20px;
+  width: 30%;
+  height: auto;
+  margin-left: auto;
+  padding-left: 20px;
 }
 
 .scene-overview div {
-    width: 70%;
+  width: 70%;
 }
 
 .chart-container {
-    display: flex;
-    justify-content: center; /* Center the chart container */
-    margin: 2% 0; /* Use percentages for margin */
-    padding: 2%; /* Use percentages for padding */
-    width: 100%; /* Ensure chart-container takes full width */
-    height: 500px;
+  display: flex;
+  justify-content: center; /* Center the chart container */
+  margin: 2% 0; /* Use percentages for margin */
+  padding: 2%; /* Use percentages for padding */
+  width: 100%; /* Ensure chart-container takes full width */
+  height: 500px;
 }
 
 #manufacturer-chart,
 #emissions-chart,
 #fuel-efficiency-chart {
-    width: 100%; /* Use 100% width for charts */
-    height: 500px; /* Fixed height */
+  width: 100%; /* Use 100% width for charts */
+  height: 500px; /* Fixed height */
 }
 
 #manufacturer-chart svg,
 #emissions-chart svg,
 #fuel-efficiency-chart svg {
-    width: 100%; /* Use 100% width for SVG */
-    height: auto; /* Adjust height automatically */
+  width: 100%; /* Use 100% width for SVG */
+  height: auto; /* Adjust height automatically */
 }
 
 #tooltip {
-    position: absolute;
-    display: none;
-    background: #333333; /* Dark background for tooltip */
-    color: #FFFFFF; /* White text for tooltip */
-    border: 1px solid #BBBBBB; /* Light gray border */
-    padding: 10px;
-    border-radius: 5px;
-    pointer-events: none;
-    z-index: 10;
+  position: absolute;
+  display: none;
+  background: #333333; /* Dark background for tooltip */
+  color: #FFFFFF; /* White text for tooltip */
+  border: 1px solid #BBBBBB; /* Light gray border */
+  padding: 10px;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .annotation-note-title,
-.annotation-note-label,
+.annotation-note-label {
+  fill: #FFFFFF; /* White text for annotations */
+}
+
 .x-axis-label,
 .y-axis-label {
-    fill: #FFFFFF; /* White text for annotations and axis labels */
+  fill: #FFFFFF; /* White text for axis labels */
+  font-size: 14px;  /* Set the desired font size */
 }
 
 .legend {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #FFFFFF; /* White text for the legend */
-    background-color: #333333; /* Dark background for the legend */
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7); /* Darker shadow to make the legend pop */
+  font-size: 14px;
 }
 
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    color: #FFFF00; /* Color of text for legend items */
-}
-
-.legend-color-box {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    border: 1px solid #444444; /* Slightly darker border */
-}
-
-.legend-label {
-    color: #FFFF00; /* Color of text for legend labels */
-    font-size: 14px; /* Font size for legend text */
+.legend-item rect {
+  stroke: #FFFFFF; /* White border around legend items for better visibility */
 }
