@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('y', -margin.left + 15)
             .attr('transform', 'rotate(-90)')
             .attr('text-anchor', 'middle')
-            .text('Fuel Efficiency (MPG)');
+            .text('Average Fuel Efficiency (MPG)');
 
         // Create bars with empty data initially
         barSvg.selectAll('.bar')

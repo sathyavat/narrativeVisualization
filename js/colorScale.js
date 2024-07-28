@@ -1,12 +1,37 @@
-const palette = [
-  '#f8b195', '#f67280', '#c06c84', '#6c5b7b', '#355c7d', '#c9ada7',
-  '#ff677d', '#d3d3d3', '#f5f5f5', '#d9bf77', '#b9e3c6', '#e6e6ea',
-  '#c1c1c1', '#f5f5f5', '#f7b7a3', '#b8c6db', '#e8d3c8', '#f0b1a3',
-  '#d7e3fc', '#a2d9e5', '#e9c8b2', '#e6a6b5', '#c0c0c0', '#b5e4d3',
-  '#b4a7d6', '#f7b7a3', '#b8c6db', '#e8d3c8', '#e9c8b2', '#e6a6b5'
+const darkPalette = [
+  '#1F3A93',  // Dark Blue
+  '#2C3E50',  // Dark Slate Blue
+  '#E74C3C',  // Bright Red
+  '#8E44AD',  // Dark Purple
+  '#3498DB',  // Bright Blue
+  '#27AE60',  // Dark Green
+  '#F39C12',  // Bright Orange
+  '#E67E22',  // Dark Orange
+  '#F1C40F',  // Bright Yellow
+  '#D35400',  // Burnt Orange
+  '#9B59B6',  // Medium Purple
+  '#1ABC9C',  // Teal
+  '#E84393',  // Light Pink
+  '#FF6F61',  // Coral
+  '#7F8C8D',  // Medium Dark Blue
+  '#BDC3C7',  // Light Silver
+  '#C0392B',  // Dark Red
+  '#FFBF00',  // Bright Yellow Orange
+  '#2980B9',  // Darker Blue
+  '#DFFF00',  // Light Yellow
+  '#FF4500',  // Orange Red
+  '#4B0082',  // Indigo
+  '#9ACD32',  // Yellow Green
+  '#DAA520',  // Golden Rod
+  '#FF6347',  // Tomato
+  '#8A2BE2',  // Blue Violet
+  '#ADFF2F',  // Green Yellow
+  '#FF1493',  // Deep Pink
+  '#00FA9A',  // Medium Spring Green
+  '#4B0082',  // Indigo (Reused for consistency)
 ];
 
-export const colorScale = d3.scaleOrdinal(palette)
+export const colorScale = d3.scaleOrdinal(darkPalette)
   .domain([
     'aston martin', 'BMW', 'Bugatti Rimac LLC', 'Canoo Technologies',
     'FCA US LLC', 'Ferrari', 'Fisker Group Inc.', 'FOMOCO', 'GM',

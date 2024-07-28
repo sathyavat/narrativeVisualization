@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("y", -margin.left + 15)
       .attr("transform", "rotate(-90)")
       .attr("text-anchor", "middle")
-      .text("Fuel Efficiency (MPG)");
+      .text("Average Fuel Efficiency (MPG)");
 
     const dotsGroup = svg.append("g")
       .attr("class", "dots");
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("transform", (d, i) => {
         const row = Math.floor(i / itemsPerRow); // Determine row
         const col = i % itemsPerRow; // Determine column
-        return `translate(${col * itemSpacing}, ${row * rowHeight})`; // Position items
+        return `translate(${col * itemSpacing}, ${(row * rowHeight) - 20})`; // Position items
       })
       .on("click", function(event, d) {
         const isActive = d3.select(this).classed("active");

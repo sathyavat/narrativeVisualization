@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('y', -margin.left + 15)
             .attr('transform', 'rotate(-90)')
             .attr('text-anchor', 'middle')
-            .text('Average MPG');
+            .text('Average Fuel Efficiency (MPG)');
 
         barSvg.selectAll('.bar')
             .data(manufacturerDataArray)
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const annotations = [
             {
                 note: { 
-                    label: 'Highest average MPG', 
+                    label: 'Highest MPG', 
                     title: largest.key
                 },
                 connector: {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 note: { 
-                    label: 'Lowest average MPG', 
+                    label: 'Lowest MPG', 
                     title: smallest.key
                 },
                 connector: {
