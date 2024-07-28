@@ -69,3 +69,33 @@ button:hover {
 .scene-overview div {
     width: 70%;
 }
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 20px;
+}
+
+#vehicle-type-chart, #manufacturer-chart {
+    width: 40%;
+}
+
+#tooltip {
+    position: absolute;
+    display: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.annotation-note-title {
+    fill: #FF6347; /* tomato color */
+}
+
+.annotation-note-label {
+    fill: #FF6347; /* tomato color */
+}

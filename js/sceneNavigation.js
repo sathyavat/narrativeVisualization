@@ -1,5 +1,14 @@
 // Navigation logic
 document.addEventListener('DOMContentLoaded', function() {
+    // Scene paths array
+    const scenes = [
+        '../index.html',
+        'scene1.html',
+        'scene2.html',
+        'scene3.html',
+        'conclusion.html'
+    ];
+
     // Handle "Begin Exploration" button on index.html
     const beginExplorationBtn = document.getElementById('begin-exploration');
     if (beginExplorationBtn) {
@@ -8,35 +17,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle "Previous" button
+    // Handle "Previous" and "Next" buttons
     const prevSceneBtn = document.getElementById('prev-scene');
-    if (prevSceneBtn) {
+    const nextSceneBtn = document.getElementById('next-scene');
+    const currentPath = window.location.pathname;
+
+    // Find the current scene index
+    let currentIndex = scenes.findIndex(scene => currentPath.includes(scene.replace('../', '')));
+
+    // Handle "Previous" button click
+    if (prevSceneBtn && currentIndex > 0) {
         prevSceneBtn.addEventListener('click', function() {
-            const currentPath = window.location.pathname;
-            if (currentPath.includes('scene1.html')) {
-                window.location.href = '../index.html';
-            } else if (currentPath.includes('scene2.html')) {
-                window.location.href = 'scene1.html';
-            } else if (currentPath.includes('scene3.html')) {
-                window.location.href = 'scene2.html';
-            } else if (currentPath.includes('conclusion.html')) {
-                window.location.href = 'scene3.html';
-            }
+            window.location.href = scenes[currentIndex - 1];
         });
     }
 
-    // Handle "Next" button
-    const nextSceneBtn = document.getElementById('next-scene');
-    if (nextSceneBtn) {
+    // Handle "Next" button click
+    if (nextSceneBtn && currentIndex < scenes.length - 1) {
         nextSceneBtn.addEventListener('click', function() {
-            const currentPath = window.location.pathname;
-            if (currentPath.includes('scene1.html')) {
-                window.location.href = 'scene2.html';
-            } else if (currentPath.includes('scene2.html')) {
-                window.location.href = 'scene3.html';
-            } else if (currentPath.includes('scene3.html')) {
-                window.location.href = 'conclusion.html';
-            }
+            window.location.href = scenes[currentIndex + 1];
         });
     }
 
