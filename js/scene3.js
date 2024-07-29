@@ -1,7 +1,6 @@
 import { cleanData } from './dataCleaning.js';
 import { colorScale } from './colorScale.js';
 
-
 document.addEventListener('DOMContentLoaded', function() {
   async function loadData() {
     try {
@@ -108,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .enter()
       .append("g")
       .attr("class", "legend-item")
+      .attr("data-manufacturer", d => d)
       .attr("transform", (d, i) => {
         const row = Math.floor(i / itemsPerRow); // Determine row
         const col = i % itemsPerRow; // Determine column
@@ -138,8 +138,26 @@ document.addEventListener('DOMContentLoaded', function() {
       .attr("y", 12) // Adjusted y position to align text with rectangle
       .attr("fill", "#FFFFFF")  // White text for dark mode
       .style("font-size", "12px") // Optional: Adjust font size
-      .text(d => d.length > 10 ? d.slice(0, 10) + "..." : d) // Truncate text and add "..."
+      .text(d => d.length > 10 ? d.slice(0, 10) + "..." : d); // Truncate text and add "..."
 
+    // Set Tesla as default filter
+    d3.selectAll(".legend-item").classed("active", false);
+    d3.selectAll(".legend-item[data-manufacturer='Tesla']").classed("active", true);
+    dots
+      .attr("opacity", dot => dot.manufacturer === 'Tesla' ? 0.9 : 0.01);
+
+    // Inline CSS for the active class
+    const style = document.createElement('style');
+    style.textContent = `
+      .legend-item.active rect {
+        stroke: #000;
+        stroke-width: 2;
+      }
+      .legend-item.active text {
+        font-weight: bold;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   loadData();
