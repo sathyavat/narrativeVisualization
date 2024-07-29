@@ -54,6 +54,6 @@ To interact with the visualization:
 2. Apply filters to explore different emission levels and manufacturers.
 3. Observe changes in charts and annotations as you interact with the data.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Note
+This project is for academic purposes only. It is implemented for CS 416: Data Visualization at the University of Illinois Urbana Champaign.
 
