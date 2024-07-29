@@ -71,6 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const dotsGroup = svg.append("g")
       .attr("class", "dots");
 
+    /**
+    Some styling done inline here because of this code was updated close to the deadline
+    based on TA (Kyo's {shoutout!}) feedback.
+    */
+
     const dots = dotsGroup.selectAll(".dot")
       .data(dataForChart)
       .enter()
@@ -140,11 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
       .style("font-size", "12px") // Optional: Adjust font size
       .text(d => d.length > 10 ? d.slice(0, 10) + "..." : d); // Truncate text and add "..."
 
-    // Set Tesla as default filter
+    // Set MAZDA as default filter
     d3.selectAll(".legend-item").classed("active", false);
-    d3.selectAll(".legend-item[data-manufacturer='Tesla']").classed("active", true);
+    d3.selectAll(".legend-item[data-manufacturer='MAZDA']").classed("active", true);
     dots
-      .attr("opacity", dot => dot.manufacturer === 'Tesla' ? 0.9 : 0.01);
+      .attr("opacity", dot => dot.manufacturer === 'MAZDA' ? 0.9 : 0.01);
 
     // Inline CSS for the active class
     const style = document.createElement('style');
